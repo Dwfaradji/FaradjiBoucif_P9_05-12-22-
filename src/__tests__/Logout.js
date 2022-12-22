@@ -9,6 +9,7 @@ import { localStorageMock } from "../__mocks__/localStorage.js"
 import DashboardUI from "../views/DashboardUI.js"
 import userEvent from '@testing-library/user-event'
 import { ROUTES } from "../constants/routes"
+import { jest } from '@jest/globals';
 
 const bills = [{
   "id": "47qAXb6fIm2zOKkLzMro",
