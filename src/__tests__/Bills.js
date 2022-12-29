@@ -36,7 +36,6 @@ describe("Given I am connected as an employee", () => {
             const windowIcon = screen.getByTestId("icon-window");
             await waitFor(() => windowIcon);
             expect(windowIcon).toHaveClass("active-icon"); //TODO 5
-            console.log('testing console log', root)
         });
 
         test("Then bills should be ordered from earliest to latest", () => {
@@ -44,22 +43,43 @@ describe("Given I am connected as an employee", () => {
                 data: bills,
             });
             const dates = screen.getAllByTestId("billDates")
-            const dateDom = []
+            const displayedDates = []
             dates.forEach((date) => {
-                dateDom.push(date.innerHTML)
+                displayedDates.push(date.innerHTML)
             })
-            const dateInit = []
+            const expectedSortedDate = []
             bills.forEach((bill) => {
-                const format = formatDate(bill.date)
-                dateInit.push(format)
+                expectedSortedDate.push(formatDate(bill.date))
             })
-            console.log(dateInit,dateDom)
-
-            expect(dateDom).toEqual(dateInit)
-
-
-
+            expect(displayedDates).toEqual(expectedSortedDate)
         });
+        test("The bills should be completed ", () => {
+            document.body.innerHTML = BillsUI({
+                data: bills,
+            });
+            const types = screen.getAllByTestId("billTypes")
+            const names = screen.getAllByTestId("billNames")
+            const amounts = screen.getAllByTestId("billAmounts")
+            const status = screen.getAllByTestId("billStatus")
+
+            types.forEach((type) => {
+                const expectValueBillType = type.innerHTML
+                expect(expectValueBillType).toBeDefined()
+            })
+            names.forEach((name) => {
+                const expectValueBillName = name.innerHTML
+                expect(expectValueBillName).toBeDefined()
+            })
+            amounts.forEach((amount) => {
+                const expectValueBillAmount = amount.innerHTML
+                expect(expectValueBillAmount).toBeDefined()
+            })
+            status.forEach((statu) => {
+                const expectValueBillStatu = statu.innerHTML
+                expect(expectValueBillStatu).toBeDefined()
+            })
+
+        })
 
         // -------------------------------------------------------- //
         // -------------------------------------------------------- //
@@ -137,9 +157,7 @@ describe("Given I am connected as an employee", () => {
                 iconEyes.forEach((iconEye) => {
                     iconEye.addEventListener("click", () => handleClickIconEye(iconEye));
                     userEvent.click(iconEye);
-
                     expect(handleClickIconEye).toHaveBeenCalled();
-
                     expect(modale).toHaveClass("show");
                 });
             });
