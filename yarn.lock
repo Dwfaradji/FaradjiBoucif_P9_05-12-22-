@@ -2375,6 +2375,13 @@
   dependencies:
     "webidl-conversions" "^5.0.0"
 
+"download-file@^0.1.5":
+  "integrity" "sha512-cTeC3HGeUdoxKmlWhcNwrCI19kb+WVcJBif1quxIeGmC91FkJzBQuHiQm25uOawV3t33JPthA6yl+f84ofn8UQ=="
+  "resolved" "https://registry.npmmirror.com/download-file/-/download-file-0.1.5.tgz"
+  "version" "0.1.5"
+  dependencies:
+    "mkdirp" "^0.5.0"
+
 "duplexer@~0.1.1":
   "integrity" "sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg=="
   "resolved" "https://registry.npmmirror.com/duplexer/-/duplexer-0.1.2.tgz"
@@ -4244,7 +4251,7 @@
   dependencies:
     "brace-expansion" "^1.1.7"
 
-"minimist@^1.1.1", "minimist@^1.2.0":
+"minimist@^1.1.1", "minimist@^1.2.0", "minimist@^1.2.6":
   "integrity" "sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g=="
   "resolved" "https://registry.npmmirror.com/minimist/-/minimist-1.2.7.tgz"
   "version" "1.2.7"
@@ -4256,6 +4263,13 @@
   dependencies:
     "for-in" "^1.0.2"
     "is-extendable" "^1.0.1"
+
+"mkdirp@^0.5.0":
+  "integrity" "sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw=="
+  "resolved" "https://registry.npmmirror.com/mkdirp/-/mkdirp-0.5.6.tgz"
+  "version" "0.5.6"
+  dependencies:
+    "minimist" "^1.2.6"
 
 "mkdirp@^1.0.3":
   "integrity" "sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw=="

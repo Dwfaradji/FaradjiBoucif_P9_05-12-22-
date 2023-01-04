@@ -8,7 +8,7 @@ import {formatDate} from "../app/format.js";
 const row = (bill) => {
     const billDate = formatDate(bill.date)
     return (`
-    <tr>
+    <tr data-testid="colum-test">
       <td data-testid="billTypes">${bill.type}</td>
       <td data-testid="billNames">${bill.name}</td>
       <td data-testid="billDates">${billDate}</td>

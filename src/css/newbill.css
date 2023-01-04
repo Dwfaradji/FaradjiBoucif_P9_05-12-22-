@@ -1,7 +1,9 @@
 .form-newbill-container {
   width: 100%;
 }
-
+#errorFileType{
+  color: red;
+}
 .col-half {
   margin:auto;
   width: 75%;

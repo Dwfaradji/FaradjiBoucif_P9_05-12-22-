@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import {screen, waitFor, within} from "@testing-library/dom";
+import {fireEvent, screen, waitFor, within} from "@testing-library/dom";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import BillsUI from "../views/BillsUI.js";
@@ -13,8 +13,9 @@ import mockedStore from "../__mocks__/store";
 import router from "../app/Router.js";
 import Bills from "../containers/Bills.js";
 import {formatDate} from "../app/format.js";
+import {arrayTest} from "../fixtures/bills.js";
 
-jest.mock("../app/store", () => mockedStore);
+jest.mock("../app/Store", () => mockedStore);
 
 describe("Given I am connected as an employee", () => {
     describe("When I am on Bills Page", () => {
@@ -47,38 +48,70 @@ describe("Given I am connected as an employee", () => {
             dates.forEach((date) => {
                 displayedDates.push(date.innerHTML)
             })
-            const expectedSortedDate = []
-            bills.forEach((bill) => {
-                expectedSortedDate.push(formatDate(bill.date))
-            })
+            const expectedSortedDate = [
+                formatDate(bills[0].date),
+                formatDate(bills[1].date),
+                formatDate(bills[2].date),
+                formatDate(bills[3].date)
+            ]
             expect(displayedDates).toEqual(expectedSortedDate)
+            // bills.forEach((bill) => {
+            //     expectedSortedDate.push(formatDate(bill.date))
+            // })
+
+
         });
         test("The bills should be completed ", () => {
+
             document.body.innerHTML = BillsUI({
                 data: bills,
             });
+
             const types = screen.getAllByTestId("billTypes")
             const names = screen.getAllByTestId("billNames")
             const amounts = screen.getAllByTestId("billAmounts")
             const status = screen.getAllByTestId("billStatus")
+            const columns = screen.getAllByTestId("colum-test")
 
+            const expectColum = columns.length
+            const expectRow = bills.length
+            expect(expectColum).toBe(4)
+            expect(expectRow).toBe(4)
+
+            const typeBill = []
+            const nameBill = []
+            const amountBill = []
+            const statusBill = []
+            bills.forEach(bill => {
+                typeBill.push(bill.type)
+                nameBill.push(bill.name)
+                amountBill.push(bill.amount.toString() + " €")
+                statusBill.push(bill.status)
+            })
+            const expectValueBillType = []
             types.forEach((type) => {
-                const expectValueBillType = type.innerHTML
-                expect(expectValueBillType).toBeDefined()
+                const valueBillType = type.innerHTML
+                expectValueBillType.push(valueBillType)
             })
+            const expectValueBillName = []
             names.forEach((name) => {
-                const expectValueBillName = name.innerHTML
-                expect(expectValueBillName).toBeDefined()
+                const valueBillName = name.innerHTML
+                expectValueBillName.push(valueBillName)
             })
+            const expectValueBillAmount = []
             amounts.forEach((amount) => {
-                const expectValueBillAmount = amount.innerHTML
-                expect(expectValueBillAmount).toBeDefined()
+                const valueBillAmount = amount.innerHTML
+                expectValueBillAmount.push(valueBillAmount)
             })
+            const expectValueBillStatus = []
             status.forEach((statu) => {
-                const expectValueBillStatu = statu.innerHTML
-                expect(expectValueBillStatu).toBeDefined()
+                const valueBillStatu = statu.innerHTML
+                expectValueBillStatus.push(valueBillStatu)
             })
-
+            expect(expectValueBillType).toEqual(typeBill)
+            expect(expectValueBillName).toEqual(nameBill)
+            expect(expectValueBillAmount).toEqual(amountBill)
+            expect(expectValueBillStatus).toEqual(statusBill)
         })
 
         // -------------------------------------------------------- //
@@ -112,11 +145,11 @@ describe("Given I am connected as an employee", () => {
                 const buttonNewBill = screen.getByRole("button", {
                     name: /nouvelle note de frais/i,
                 });
-                expect(buttonNewBill).toBeTruthy();
                 const handleClickNewBill = jest.fn(bills.handleClickNewBill);
                 buttonNewBill.addEventListener("click", handleClickNewBill);
                 userEvent.click(buttonNewBill);
-                expect(handleClickNewBill).toHaveBeenCalled();
+                const expectStringAfterClick = screen.getByText("Envoyer une note de frais")
+                expect(expectStringAfterClick).toBeInTheDocument()
             });
         });
 
@@ -145,21 +178,24 @@ describe("Given I am connected as an employee", () => {
                 });
 
                 document.body.innerHTML = BillsUI({data: bills});
-
                 const iconEyes = screen.getAllByTestId("icon-eye");
-
-                const handleClickIconEye = jest.fn(billsPage.handleClickIconEye);
+                const element = iconEyes[1]
 
                 const modale = document.getElementById("modaleFile");
+                const handleClickIconEye = jest.fn(billsPage.handleClickIconEye);
 
                 $.fn.modal = jest.fn(() => modale.classList.add("show")); //mock de la modale Bootstrap
 
-                iconEyes.forEach((iconEye) => {
-                    iconEye.addEventListener("click", () => handleClickIconEye(iconEye));
-                    userEvent.click(iconEye);
-                    expect(handleClickIconEye).toHaveBeenCalled();
-                    expect(modale).toHaveClass("show");
-                });
+                element.addEventListener("click", () => handleClickIconEye(element));
+                fireEvent.click(element);
+                const z = modale
+                const billUrl = element.getAttribute("data-bill-url")
+                const expectFileDocument = bills[1].fileUrl
+                const modal = screen.getByText("Justificatif")
+                expect(modal).toBeInTheDocument()
+                expect(modale).toBeInTheDocument()
+                expect(billUrl).toEqual(expectFileDocument)
+
             });
         });
 

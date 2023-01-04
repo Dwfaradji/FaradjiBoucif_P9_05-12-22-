@@ -20,16 +20,17 @@ export default class NewBill {
         e.preventDefault()
         // TODO : Ajout d'une condition pour accepter que les extension autoriser.
         const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
+        console.log(file)
         const extensionCheck = /(png|jpg|jpeg)/g
         const extension = file.name.split('.').pop()
 
         if (extension.toLowerCase().match(extensionCheck)) {
-            // document.getElementById('errorFileType').classList.add('hideErrorMessage');
+            document.getElementById('errorFileType').innerHTML= "";
             const filePath = e.target.value.split(/\\/g)
             const fileName = filePath[filePath.length - 1]
             this.handleFirestoreStorage(fileName, file);
         } else {
-            // document.getElementById('errorFileType').classList.remove('hideErrorMessage');
+            document.getElementById('errorFileType').innerHTML="Erreur Type File";
             this.document.querySelector(`input[data-testid='file']`).value = null;
         }
     }
@@ -49,7 +50,6 @@ export default class NewBill {
                 },
             })
             .then(({fileUrl, key}) => {
-                console.log(fileUrl)
                 this.billId = key
                 this.fileUrl = fileUrl
                 this.fileName = fileName

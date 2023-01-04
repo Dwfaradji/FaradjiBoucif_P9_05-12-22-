@@ -86,30 +86,55 @@ export default class {
     }
 
     handleEditTicket(e, bill, bills) {
-        if (this.counter === undefined || this.id !== bill.id) this.counter = 0
-        if (this.id === undefined || this.id !== bill.id) this.id = bill.id
-        if (this.counter % 2 === 0) {
-            bills.forEach(b => {
-                $(`#open-bill${b.id}`).css({background: '#0D5AE5'})
-            })
-            $(`#open-bill${bill.id}`).css({background: '#2A2B35'})
-            $('.dashboard-right-container div').html(DashboardFormUI(bill))
-            $('.vertical-navbar').css({height: '150vh'})
-            this.counter++
-        } else {
-            // TODO :
-            $(`#open-bill${bill.id}`).css({background: '#0D5AE5'})
-            $(`#open-bill${bill.id}`).css({background: '#2A2B35'})
-            // $('.dashboard-right-container div').html(DashboardFormUI(bill))
-            $('.dashboard-right-container div').html(`
-              <div id="big-billed-icon" data-testid="big-billed-icon"> ${DashboardFormUI(bill)} </div>
-            `)
-            $('.vertical-navbar').css({height: '120vh'})
-            this.counter++
-        }
+        // Parcourt chaque élément de la liste 'bills'
+        bills.forEach(b => {
+            // Mét leur arrière-plan en bleu
+            $(`#open-bill${b.id}`).css({background: '#0D5AE5'})
+        })
+
+        // Met l'arrière-plan de l'élément sur lequel on a cliqué en gris foncé
+        $(`#open-bill${bill.id}`).css({background: '#2A2B35'})
+
+        // Remplace le contenu de l'élément HTML ayant la classe '.dashboard-right-container div' par le résultat de l'appel de la fonction 'DashboardFormUI'
+        $('.dashboard-right-container div').html(`
+        //       <div id="big-billed-icon" data-testid="big-billed-icon"> ${DashboardFormUI(bill)} </div>
+        //     `)
+        // Modifie la hauteur de l'élément HTML ayant la classe '.vertical-navbar'
+        $('.vertical-navbar').css({height: '150vh'})
+
+        // Attache un gestionnaire d'événement 'click' à l'élément HTML ayant l'ID 'icon-eye-d'
         $('#icon-eye-d').click(this.handleClickIconEye)
+
+        // Attache un gestionnaire d'événement 'click' à l'élément HTML ayant l'ID 'btn-accept-bill'
         $('#btn-accept-bill').click((e) => this.handleAcceptSubmit(e, bill))
+
+        // Attache un gestionnaire d'événement 'click' à l'élément HTML ayant l'ID 'btn-refuse-bill'
         $('#btn-refuse-bill').click((e) => this.handleRefuseSubmit(e, bill))
+
+        // if (this.counter === undefined || this.id !== bill.id) this.counter = 0
+        // if (this.id === undefined || this.id !== bill.id) this.id = bill.id
+        // if (this.counter % 2 === 0) {
+        //     bills.forEach(b => {
+        //         $(`#open-bill${b.id}`).css({background: '#0D5AE5'})
+        //     })
+        //     $(`#open-bill${bill.id}`).css({background: '#2A2B35'})
+        //     $('.dashboard-right-container div').html(DashboardFormUI(bill))
+        //     $('.vertical-navbar').css({height: '150vh'})
+        //     this.counter++
+        // } else {
+        //     // TODO :
+        //     $(`#open-bill${bill.id}`).css({background: '#0D5AE5'})
+        //     $(`#open-bill${bill.id}`).css({background: '#2A2B35'})
+        //     $('.dashboard-right-container div').html(DashboardFormUI(bill))
+        //     $('.dashboard-right-container div').html(`
+        //       <div id="big-billed-icon" data-testid="big-billed-icon"> ${DashboardFormUI(bill)} </div>
+        //     `)
+        //     $('.vertical-navbar').css({height: '120vh'})
+        //     this.counter++
+        // }
+        // $('#icon-eye-d').click(this.handleClickIconEye)
+        // $('#btn-accept-bill').click((e) => this.handleAcceptSubmit(e, bill))
+        // $('#btn-refuse-bill').click((e) => this.handleRefuseSubmit(e, bill))
     }
 
     handleAcceptSubmit = (e, bill) => {
@@ -132,28 +157,58 @@ export default class {
         this.onNavigate(ROUTES_PATH['Dashboard'])
     }
 
+    // handleShowTickets(e, bills, index) {
+    //     // bills.forEach(bill => {
+    //     //     $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+    //     // })
+    //     // $(`#open-bill${bill.id}`).css({background: '#2A2B35'})
+    //     //
+    //     // $('.dashboard-right-container div').html(DashboardFormUI(bill))
+    //     // $('.vertical-navbar').css({height: '150vh'})
+    //     // $('#icon-eye-d').click(this.handleClickIconEye)
+    //     // $('#btn-accept-bill').click((e) => this.handleAcceptSubmit(e, bill))
+    //     // $('#btn-refuse-bill').click((e) => this.handleRefuseSubmit(e, bill))
+    //     console.log("test")
+    //     if (this.counter === undefined || this.index !== index) this.counter = 0
+    //     if (this.index === undefined || this.index !== index) this.index = index
+    //     if (this.counter % 2 === 0) {
+    //         $(`#arrow-icon${this.index}`).css({transform: 'rotate(0deg)'})
+    //         $(`#status-bills-container${this.index}`)
+    //             .html(cards(filteredBills(bills, getStatus(this.index))))
+    //         this.counter++
+    //     } else {
+    //         $(`#arrow-icon${this.index}`).css({transform: 'rotate(90deg)'})
+    //         $(`#status-bills-container${this.index}`)
+    //             .html("")
+    //         this.counter++
+    //     }
+    //
+    //     bills.forEach(bill => {
+    //         $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+    //     })
+    //
+    //     return bills
+    //
+    // }
     handleShowTickets(e, bills, index) {
+        this.index = index;
+        this.counter = (this.counter === undefined || this.index !== index) ? 0 : this.counter;
 
-        if (this.counter === undefined || this.index !== index) this.counter = 0
-        if (this.index === undefined || this.index !== index) this.index = index
         if (this.counter % 2 === 0) {
-            $(`#arrow-icon${this.index}`).css({transform: 'rotate(0deg)'})
-            $(`#status-bills-container${this.index}`)
-                .html(cards(filteredBills(bills, getStatus(this.index))))
-            this.counter++
+            $(`#arrow-icon${this.index}`).css({transform: 'rotate(0deg)'});
+            $(`#status-bills-container${this.index}`).html(cards(filteredBills(bills, getStatus(this.index))));
         } else {
-            $(`#arrow-icon${this.index}`).css({transform: 'rotate(90deg)'})
-            $(`#status-bills-container${this.index}`)
-                .html("")
-            this.counter++
+            $(`#arrow-icon${this.index}`).css({transform: 'rotate(90deg)'});
+            $(`#status-bills-container${this.index}`).html("");
         }
 
+        this.counter++;
+
         bills.forEach(bill => {
-            $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
-        })
+            $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills));
+        });
 
-        return bills
-
+        return bills;
     }
 
     getBillsAllUsers = () => {

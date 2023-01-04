@@ -33,7 +33,7 @@ export default class {
     $("#modaleFile")
       .find(".modal-body")
       .html(
-        `<div style='text-align: center;' class="bill-proof-container"><img crossorigin="anonymous" width=${imgWidth} src=${billUrl} alt="Bill" /></div>`
+        `<div style='text-align: center;' class="bill-proof-container" ><img crossorigin="anonymous"  width=${imgWidth} src=${billUrl} alt="Bill" /></div>`
       );
     $("#modaleFile").modal();
   };
@@ -62,7 +62,6 @@ export default class {
               };
             }
           });
-
           return bills;
         });
     }
