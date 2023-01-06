@@ -10,6 +10,10 @@ export default class NewBill {
         formNewBill.addEventListener("submit", this.handleSubmit)
         const file = this.document.querySelector(`input[data-testid="file"]`)
         file.addEventListener("change", this.handleChangeFile)
+        const returnHome = document.querySelector("#layout-icon1")
+        returnHome.addEventListener("click", () => {
+            this.onNavigate(ROUTES_PATH['Bills'])
+        })
         this.fileUrl = null
         this.fileName = null
         this.billId = null
@@ -20,17 +24,16 @@ export default class NewBill {
         e.preventDefault()
         // TODO : Ajout d'une condition pour accepter que les extension autoriser.
         const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
-        console.log(file)
         const extensionCheck = /(png|jpg|jpeg)/g
         const extension = file.name.split('.').pop()
 
         if (extension.toLowerCase().match(extensionCheck)) {
-            document.getElementById('errorFileType').innerHTML= "";
+            document.getElementById('errorFileType').innerHTML = "";
             const filePath = e.target.value.split(/\\/g)
             const fileName = filePath[filePath.length - 1]
             this.handleFirestoreStorage(fileName, file);
         } else {
-            document.getElementById('errorFileType').innerHTML="Erreur Type File";
+            document.getElementById('errorFileType').innerHTML = "Erreur Type File";
             this.document.querySelector(`input[data-testid='file']`).value = null;
         }
     }
