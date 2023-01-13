@@ -1,9 +1,3 @@
-export const arrayTest = [{
-    "date": "2004-12-21"
-}, {"date": "2001-12-21"}, {"date": "2003-12-21"}, {"date": "2002-12-21"}
-]
-
-
 export const bills = [{
     "id": "47qAXb6fIm2zOKkLzMro",
     "vat": "80",

@@ -72,9 +72,11 @@ export default class {
         this.document = document
         this.onNavigate = onNavigate
         this.store = store
+
         $('#arrow-icon1').click((e) => this.handleShowTickets(e, bills, 1))
         $('#arrow-icon2').click((e) => this.handleShowTickets(e, bills, 2))
         $('#arrow-icon3').click((e) => this.handleShowTickets(e, bills, 3))
+
         new Logout({localStorage, onNavigate})
     }
 
@@ -86,55 +88,27 @@ export default class {
     }
 
     handleEditTicket(e, bill, bills) {
-        // Parcourt chaque élément de la liste 'bills'
-        bills.forEach(b => {
-            // Mét leur arrière-plan en bleu
-            $(`#open-bill${b.id}`).css({background: '#0D5AE5'})
-        })
-
-        // Met l'arrière-plan de l'élément sur lequel on a cliqué en gris foncé
-        $(`#open-bill${bill.id}`).css({background: '#2A2B35'})
-
-        // Remplace le contenu de l'élément HTML ayant la classe '.dashboard-right-container div' par le résultat de l'appel de la fonction 'DashboardFormUI'
-        $('.dashboard-right-container div').html(`
-        //       <div id="big-billed-icon" data-testid="big-billed-icon"> ${DashboardFormUI(bill)} </div>
-        //     `)
-        // Modifie la hauteur de l'élément HTML ayant la classe '.vertical-navbar'
-        $('.vertical-navbar').css({height: '150vh'})
-
-        // Attache un gestionnaire d'événement 'click' à l'élément HTML ayant l'ID 'icon-eye-d'
+        if (this.counter === undefined || this.id !== bill.id) this.counter = 0
+        if (this.id === undefined || this.id !== bill.id) this.id = bill.id
+        if (this.counter % 2 === 0) {
+            bills.forEach(b => {
+                $(`#open-bill${b.id}`).css({background: '#0D5AE5'})
+            })
+            $(`#open-bill${bill.id}`).css({background: '#2A2B35'})
+            $('.dashboard-right-container div').html(DashboardFormUI(bill))
+            $('.vertical-navbar').css({height: '150vh'})
+            this.counter++
+        } else {
+            $(`#open-bill${bill.id}`).css({background: '#0D5AE5'})
+            $('.dashboard-right-container div').html(`
+        <div id="big-billed-icon" data-testid="big-billed-icon"> ${BigBilledIcon} </div>
+      `)
+            $('.vertical-navbar').css({height: '120vh'})
+            this.counter++
+        }
         $('#icon-eye-d').click(this.handleClickIconEye)
-
-        // Attache un gestionnaire d'événement 'click' à l'élément HTML ayant l'ID 'btn-accept-bill'
         $('#btn-accept-bill').click((e) => this.handleAcceptSubmit(e, bill))
-
-        // Attache un gestionnaire d'événement 'click' à l'élément HTML ayant l'ID 'btn-refuse-bill'
         $('#btn-refuse-bill').click((e) => this.handleRefuseSubmit(e, bill))
-
-        // if (this.counter === undefined || this.id !== bill.id) this.counter = 0
-        // if (this.id === undefined || this.id !== bill.id) this.id = bill.id
-        // if (this.counter % 2 === 0) {
-        //     bills.forEach(b => {
-        //         $(`#open-bill${b.id}`).css({background: '#0D5AE5'})
-        //     })
-        //     $(`#open-bill${bill.id}`).css({background: '#2A2B35'})
-        //     $('.dashboard-right-container div').html(DashboardFormUI(bill))
-        //     $('.vertical-navbar').css({height: '150vh'})
-        //     this.counter++
-        // } else {
-        //     // TODO :
-        //     $(`#open-bill${bill.id}`).css({background: '#0D5AE5'})
-        //     $(`#open-bill${bill.id}`).css({background: '#2A2B35'})
-        //     $('.dashboard-right-container div').html(DashboardFormUI(bill))
-        //     $('.dashboard-right-container div').html(`
-        //       <div id="big-billed-icon" data-testid="big-billed-icon"> ${DashboardFormUI(bill)} </div>
-        //     `)
-        //     $('.vertical-navbar').css({height: '120vh'})
-        //     this.counter++
-        // }
-        // $('#icon-eye-d').click(this.handleClickIconEye)
-        // $('#btn-accept-bill').click((e) => this.handleAcceptSubmit(e, bill))
-        // $('#btn-refuse-bill').click((e) => this.handleRefuseSubmit(e, bill))
     }
 
     handleAcceptSubmit = (e, bill) => {
@@ -157,50 +131,54 @@ export default class {
         this.onNavigate(ROUTES_PATH['Dashboard'])
     }
 
+    handleShowTickets(e, bills, index) {
+        console.log(this.index)
+        if (this.counter === undefined || this.index !== index) this.counter = 0
+        if (this.index === undefined || this.index !== index) this.index = index
+        if (this.counter % 2 === 0) {
+            $(`#arrow-icon${this.index}`).css({transform: 'rotate(0deg)'})
+            $(`#status-bills-container${this.index}`)
+                .html(cards(filteredBills(bills, getStatus(this.index))))
+            this.counter++
+        } else {
+            $(`#arrow-icon${this.index}`).css({transform: 'rotate(90deg)'})
+            $(`#status-bills-container${this.index}`)
+                .html("")
+            this.counter++
+        }
+
+        bills.forEach(bill => {
+            $(`#open-bill${bill.id}`).unbind().click((e) => this.handleEditTicket(e, bill, bills))
+        })
+
+        return bills
+
+    }
+
     // handleShowTickets(e, bills, index) {
+    //
+    //     // Initialise this.counter et this.index si nécessaire
     //     this.counter = (this.counter === undefined || this.index !== index) ? 0 : this.counter;
     //     this.index = (this.index === undefined || this.index !== index) ? index : this.index;
-    //     if (this.counter % 2 === 0) {
-    //         $(`#arrow-icon${this.index}`).css({transform: 'rotate(0deg)'})
-    //         $(`#status-bills-container${this.index}`)
-    //             .html(cards(filteredBills(bills, getStatus(this.index))))
-    //     } else {
-    //         $(`#arrow-icon${this.index}`).css({transform: 'rotate(90deg)'})
-    //         $(`#status-bills-container${this.index}`)
-    //             .html("")
-    //     }
-    //     this.counter++
     //
+    //     // Détermine la valeur de l'attribut transform de la flèche en fonction de this.counter
+    //     const rotate = (this.counter % 2 === 0) ? 'rotate(0deg)' : 'rotate(90deg)';
+    //     $(`#arrow-icon${this.index}`).css({transform: rotate});
+    //
+    //     // Détermine la valeur de html en fonction de this.counter
+    //     const html = (this.counter % 2 === 0) ? cards(filteredBills(bills, getStatus(this.index))) : '';
+    //     $(`#status-bills-container${this.index}`).html(html);
+    //
+    //     // Incrémente this.counter
+    //     this.counter++;
+    //
+    //     // Ajoute un gestionnaire d'événement click à chaque facture
     //     bills.forEach(bill => {
-    //         $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
-    //     })
+    //         $(`#open-bill${bill.id}`).unbind().click((e) => this.handleEditTicket(e, bill, bills));
+    //     });
     //
-    //     return bills
-    //
+    //     return bills;
     // }
-    handleShowTickets(e, bills, index) {
-        // Initialise this.counter et this.index si nécessaire
-        this.counter = (this.counter === undefined || this.index !== index) ? 0 : this.counter;
-        this.index = (this.index === undefined || this.index !== index) ? index : this.index;
-
-        // Détermine la valeur de l'attribut transform de la flèche en fonction de this.counter
-        const rotate = (this.counter % 2 === 0) ? 'rotate(0deg)' : 'rotate(90deg)';
-        $(`#arrow-icon${this.index}`).css({transform: rotate});
-
-        // Détermine la valeur de html en fonction de this.counter
-        const html = (this.counter % 2 === 0) ? cards(filteredBills(bills, getStatus(this.index))) : '';
-        $(`#status-bills-container${this.index}`).html(html);
-
-        // Incrémente this.counter
-        this.counter++;
-
-        // Ajoute un gestionnaire d'événement click à chaque facture
-        bills.forEach(bill => {
-            $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills));
-        });
-
-        return bills;
-    }
 
 
     getBillsAllUsers = () => {
