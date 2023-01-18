@@ -16,6 +16,7 @@ import {formatDate} from "../app/format.js";
 
 jest.mock("../app/Store", () => mockedStore);
 
+
 describe("Given I am connected as an employee", () => {
     describe("When I am on Bills Page", () => {
         test("Then bill icon in vertical layout should be highlighted", async () => {
@@ -156,18 +157,15 @@ describe("Given I am connected as an employee", () => {
                 const onNavigate = (pathname) => {
                     document.body.innerHTML = ROUTES({pathname});
                 };
-
                 Object.defineProperty(window, "localStorage", {
                     value: localStorageMock,
                 });
-
                 window.localStorage.setItem(
                     "user",
                     JSON.stringify({
                         type: "Employee",
                     })
                 );
-
                 const billsPage = new Bills({
                     document,
                     onNavigate,
@@ -181,7 +179,6 @@ describe("Given I am connected as an employee", () => {
 
                 const modale = document.getElementById("modaleFile");
                 const handleClickIconEye = jest.fn(billsPage.handleClickIconEye);
-
                 $.fn.modal = jest.fn(() => modale.classList.add("show")); //mock de la modale Bootstrap
 
                 element.addEventListener("click", () => handleClickIconEye(element));
@@ -195,7 +192,6 @@ describe("Given I am connected as an employee", () => {
                 expect(modal).toBeInTheDocument()
                 expect(modale).toBeInTheDocument()
                 expect(billUrl).toEqual(expectFileDocument)
-
             });
         });
 
@@ -246,6 +242,7 @@ describe("Given I am connected as an employee", () => {
             });
 
             test("Then fetches bills from an API and fails with 404 message error", async () => {
+
                 mockedStore.bills.mockImplementationOnce(() => {
                     return {
                         list: () => {
@@ -267,11 +264,9 @@ describe("Given I am connected as an employee", () => {
                         },
                     };
                 });
-
                 window.onNavigate(ROUTES_PATH.Bills);
                 await new Promise(process.nextTick);
                 const message = screen.getByText(/Erreur 500/);
-
                 expect(message).toBeTruthy();
             });
         });

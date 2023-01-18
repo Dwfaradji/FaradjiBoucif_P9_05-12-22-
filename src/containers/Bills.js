@@ -4,6 +4,7 @@ import Logout from "./Logout.js";
 
 export default class {
     constructor({document, onNavigate, store, localStorage}) {
+        debugger
         this.document = document;
         this.onNavigate = onNavigate;
         this.store = store;
@@ -49,8 +50,6 @@ export default class {
                                 status: formatStatus(doc.status),
                             };
                         } catch (e) {
-                            // if for some reason, corrupted data was introduced, we manage here failing formatDate function
-                            // log the error and return unformatted date in that case
                             return {
                                 ...doc,
                                 date: doc.date,
